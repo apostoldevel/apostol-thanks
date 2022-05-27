@@ -135,21 +135,22 @@ $ sudo service thnx status
 
 Результат должен быть **примерно** таким:
 ~~~
-● thnx.service - THNX (Donate system)
-   Loaded: loaded (/usr/lib/systemd/system/thnx.service; enabled; vendor preset: disabled)
-   Active: active (running) since Tue 2021-12-28 14:24:04 UTC; 1 weeks 0 days ago
-  Process: 878560 ExecReload=/bin/kill -s HUP $MAINPID (code=exited, status=0/SUCCESS)
-  Process: 938206 ExecStart=/usr/sbin/thnx (code=exited, status=0/SUCCESS)
-  Process: 938204 ExecStartPre=/usr/sbin/thnx -t (code=exited, status=0/SUCCESS)
-  Process: 938202 ExecStartPre=/usr/bin/rm -f /run/thnx.pid (code=exited, status=0/SUCCESS)
- Main PID: 938207 (thnx)
-    Tasks: 4 (limit: 49484)
-   Memory: 20.1M
-   CGroup: /system.slice/thnx.service
-           ├─938207 thnx: master process /usr/sbin/thnx
-           ├─938208 thnx: worker process ("web socket api", "application server", "authorization server", "web server")
-           ├─938209 thnx: message server
-           └─938210 thnx: job scheduler
+● thnx.service - THNX - Donate System
+     Loaded: loaded (/etc/systemd/system/thnx.service; enabled; vendor preset: enabled)
+     Active: active (running) since Fri 2022-05-27 13:41:41 MSK; 55s ago
+    Process: 420387 ExecStartPre=/usr/bin/rm -f /run/thnx.pid (code=exited, status=0/SUCCESS)
+    Process: 420388 ExecStartPre=/usr/sbin/thnx -t (code=exited, status=0/SUCCESS)
+    Process: 420389 ExecStart=/usr/sbin/thnx (code=exited, status=0/SUCCESS)
+   Main PID: 420390 (thnx)
+      Tasks: 5 (limit: 2364)
+     Memory: 5.8M
+        CPU: 579ms
+     CGroup: /system.slice/thnx.service
+             ├─420390 thnx: master process /usr/sbin/thnx
+             ├─420391 thnx: worker process ("websocket api", "application server", "authorization server", "web server")
+             ├─420392 thnx: helper process ("pg fetch")
+             ├─420393 thnx: message server
+             └─420394 thnx: task scheduler
 ~~~
 
 ### **Управление**.
