@@ -12,7 +12,7 @@
 #------------------------------------------------------------------------------
 set -e
 
-PROJECT_NAME=apostol-css
+PROJECT_NAME=apostol-thanks
 BUILD_TYPE=Release
 
 pop_directory()
@@ -111,10 +111,9 @@ github()
     download_from_github src/lib ufocomp libdelphi master delphi
     download_from_github src apostoldevel apostol-core master core
 
-    download_from_github src/modules/Workers apostoldevel module-WebServer master WebServer
     download_from_github src/modules/Workers apostoldevel module-AppServer master AppServer
     download_from_github src/modules/Workers apostoldevel module-AuthServer master AuthServer
-    download_from_github src/modules/Workers apostoldevel module-FileServer master FileServer
+    download_from_github src/modules/Workers apostoldevel module-WebServer master WebServer
     download_from_github src/modules/Workers apostoldevel module-WebSocketAPI master WebSocketAPI
     download_from_github src/modules/Helpers apostoldevel module-PGFetch master PGFetch
 

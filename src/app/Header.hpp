@@ -2,7 +2,7 @@
 
 Program name:
 
-  css
+  thnx
 
 Module Name:
 
@@ -10,7 +10,7 @@ Module Name:
 
 Notices:
 
-  OCPP Central System Service
+  THNX - Donate System
 
 Author:
 

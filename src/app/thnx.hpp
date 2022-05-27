@@ -2,15 +2,15 @@
 
 Program name:
 
-  css
+  thnx
 
 Module Name:
 
-  css.hpp
+  thnx.hpp
 
 Notices:
 
-  OCPP Central System Service
+  THNX - Donate System
 
 Author:
 
@@ -21,8 +21,8 @@ Author:
 
 --*/
 
-#ifndef APOSTOL_CSS_HPP
-#define APOSTOL_CSS_HPP
+#ifndef APOSTOL_THNX_HPP
+#define APOSTOL_THNX_HPP
 //----------------------------------------------------------------------------------------------------------------------
 
 #include "../../version.h"
@@ -39,9 +39,9 @@ extern "C++" {
 
 namespace Apostol {
 
-    namespace CSS {
+    namespace THNX {
 
-        class CCSS: public CApplication {
+        class CTHNX: public CApplication {
         protected:
 
             void ParseCmdLine() override;
@@ -52,14 +52,14 @@ namespace Apostol {
 
         public:
 
-            CCSS(int argc, char *const *argv): CApplication(argc, argv) {
+            CTHNX(int argc, char *const *argv): CApplication(argc, argv) {
 
             };
 
-            ~CCSS() override = default;
+            ~CTHNX() override = default;
 
-            static class CCSS *Create(int argc, char *const *argv) {
-                return new CCSS(argc, argv);
+            static class CTHNX *Create(int argc, char *const *argv) {
+                return new CTHNX(argc, argv);
             };
 
             inline void Destroy() override { delete this; };
@@ -70,8 +70,8 @@ namespace Apostol {
     }
 }
 
-using namespace Apostol::CSS;
+using namespace Apostol::THNX;
 }
 
-#endif //APOSTOL_CSS_HPP
+#endif //APOSTOL_THNX_HPP
 

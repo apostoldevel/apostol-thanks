@@ -2,15 +2,15 @@
 
 Program name:
 
-  css
+  thnx
 
 Module Name:
 
-  css.cpp
+  thnx.cpp
 
 Notices:
 
-  OCPP Central System Service
+  THNX - Donate System
 
 Author:
 
@@ -21,7 +21,7 @@ Author:
 
 --*/
 
-#include "css.hpp"
+#include "thnx.hpp"
 //----------------------------------------------------------------------------------------------------------------------
 
 #define exit_failure(msg) {                                 \
@@ -37,9 +37,9 @@ extern "C++" {
 
 namespace Apostol {
 
-    namespace CSS {
+    namespace THNX {
 
-        void CCSS::ShowVersionInfo() {
+        void CTHNX::ShowVersionInfo() {
 
             std::cerr << APP_NAME " version: " APP_VERSION " (" APP_DESCRIPTION ")" LINEFEED << std::endl;
 
@@ -66,7 +66,7 @@ namespace Apostol {
         }
         //--------------------------------------------------------------------------------------------------------------
 
-        void CCSS::ParseCmdLine() {
+        void CTHNX::ParseCmdLine() {
 
             LPCTSTR P;
 
@@ -185,7 +185,7 @@ namespace Apostol {
         }
         //--------------------------------------------------------------------------------------------------------------
 
-        void CCSS::CreateCustomProcesses() {
+        void CTHNX::CreateCustomProcesses() {
             if (Config()->IniFile().ReadBool("process/MessageServer", "enable", true)) {
                 AddProcess<CMessageServer>();
                 m_ProcessType = ptCustom;
@@ -198,16 +198,18 @@ namespace Apostol {
         }
         //--------------------------------------------------------------------------------------------------------------
 
-        void CCSS::StartProcess() {
-            if (Config()->Helper()) {
-                m_ProcessType = ptHelper;
+        void CTHNX::StartProcess() {
+            if (m_ProcessType != ptSignaller) {
+                if (Config()->Helper()) {
+                    m_ProcessType = ptHelper;
+                }
             }
 
             CApplication::StartProcess();
         }
         //--------------------------------------------------------------------------------------------------------------
 
-        void CCSS::Run() {
+        void CTHNX::Run() {
             CApplication::Run();
         }
         //--------------------------------------------------------------------------------------------------------------
@@ -222,18 +224,18 @@ int main(int argc, char *argv[]) {
 
     DefaultLocale.SetLocale("");
 
-    CCSS css(argc, argv);
+    CTHNX thnx(argc, argv);
     
     try
     {
-        css.Name() = APP_NAME;
-        css.Description() = APP_DESCRIPTION;
-        css.Version() = APP_VERSION;
-        css.Title() = APP_VER;
+        thnx.Name() = APP_NAME;
+        thnx.Description() = APP_DESCRIPTION;
+        thnx.Version() = APP_VERSION;
+        thnx.Title() = APP_VER;
 
-        css.Run();
+        thnx.Run();
 
-        exitcode = css.ExitCode();
+        exitcode = thnx.ExitCode();
     }
     catch (std::exception& e)
     {

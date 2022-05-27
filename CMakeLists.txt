@@ -5,7 +5,7 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-libgcc -static-libstdc++ -rdynamic")
 
 set(PROJECT_NAME "thnx")
-set(PROJECT_DESCRIPTION "THNX - Donate system")
+set(PROJECT_DESCRIPTION "THNX - Donate System")
 
 message(STATUS "Project name: ${PROJECT_NAME}")
 message(STATUS "Project description: ${PROJECT_DESCRIPTION}")
