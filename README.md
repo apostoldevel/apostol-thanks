@@ -19,6 +19,37 @@ API
 
 Документация к [WebSocket API](https://github.com/apostoldevel/module-WebSocketAPI#websocket-api) платформы [Апостол CRM](https://github.com/apostoldevel/apostol-crm).
 
+Docker
+-
+
+Вы можете собрать образ самостоятельно или получить уже готовый из докер-хаб:
+
+### Собрать
+
+~~~
+docker build -t thnx .
+~~~
+
+### Получить
+
+~~~
+docker pull apostoldevel/thnx
+~~~
+
+### Запустить
+
+Если собрали самомтоятельно:
+~~~
+docker run -d -p 8080:8080 --rm --name thnx thnx
+~~~
+
+Если получили готовый образ:
+~~~
+docker run -d -p 8080:8080 --rm --name thnx apostoldevel/thnx
+~~~
+
+Swagger UI будет доступен по адресу [http://localhost:8080/docs/](http://localhost:8080/docs/) или http://host-ip:8080/docs/ в вашем браузере.
+
 СБОРКА И УСТАНОВКА
 -
 
