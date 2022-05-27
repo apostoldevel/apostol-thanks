@@ -1,0 +1,79 @@
+{
+  "web": {
+    "issuers": ["accounts.donate-system.ru"],
+    "scopes": ["thanks"],
+    "client_id": "web-donate-system.ru",
+    "client_secret": "lhI5KU1UMauAca648pOXVvUa",
+    "algorithm": "HS256",
+    "auth_uri": "/oauth2/authorize",
+    "token_uri": "/oauth2/token",
+    "redirect_uris": [
+    	"http://localhost:8080/oauth2/code",
+    	"http://localhost:8080/oauth2/callback", 
+    	"http://localhost:3000/oauth2/code",
+    	"http://localhost:3000/oauth2/callback",
+    	"https://donate-system.ru/oauth2/code",
+    	"https://donate-system.ru/oauth2/callback",
+    	"https://oauthdebugger.com/debug"
+    ],
+    "javascript_origins": [
+      "http://localhost:8080",
+      "http://localhost:3000",
+      "https://donate-system.ru"
+    ]
+  },
+  "service": {
+    "issuers": ["accounts.donate-system.ru"],
+    "scopes": ["thanks"],
+    "client_id": "service-donate-system.ru",
+    "client_secret": "JLFNkBWWzehemKc8XS4xq0Je",
+    "algorithm": "HS256",
+    "auth_uri": "/oauth2/authorize",
+    "token_uri": "/oauth2/token",
+    "redirect_uris": [
+      "https://donate-system.ru/dashboard/",
+      "https://oauthdebugger.com/debug"
+    ],
+    "javascript_origins": [
+      "http://localhost:8080",
+      "http://localhost:3000",
+      "https://donate-system.ru"
+    ]
+  },
+  "android": {
+    "issuers": ["accounts.donate-system.ru"],
+    "scopes": ["thanks"],
+    "client_id": "android-donate-system.ru",
+    "client_secret": "LEhl73UZ12Q24OJYRoTOFGcN",
+    "algorithm": "HS256",
+    "auth_uri": "https://donate-system.ru/oauth2/authorize",
+    "token_uri": "https://donate-system.ru/oauth2/token",
+    "redirect_uris": [
+    	"http://127.0.0.1/oauth2/code",
+    	"http://127.0.0.1/oauth2/callback"
+    ],
+    "javascript_origins": [
+      "http://localhost:8080",
+      "http://localhost:3000",
+      "https://donate-system.ru"
+    ]
+  },
+  "ios": {
+    "issuers": ["accounts.donate-system.ru"],
+    "scopes": ["thanks"],
+    "client_id": "ios-donate-system.ru",
+    "client_secret": "CHDfZA1bJ4hllfR01tpiUfpt",
+    "algorithm": "HS256",
+    "auth_uri": "https://donate-system.ru/oauth2/authorize",
+    "token_uri": "https://donate-system.ru/oauth2/token",
+    "redirect_uris": [
+    	"http://127.0.0.1/oauth2/code",
+    	"http://127.0.0.1/oauth2/callback"
+    ],
+    "javascript_origins": [
+      "http://localhost:8080",
+      "http://localhost:3000",
+      "https://donate-system.ru"
+    ]
+  }
+}

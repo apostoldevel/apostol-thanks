@@ -1,0 +1,4750 @@
+openapi: 3.0.0
+info:
+  description: |
+    This is a THNX API.
+  version: "1.0.0"
+  title: THNX - Donate system
+  contact:
+    email: ufocomp@gmail.com
+  license:
+    name: MIT License
+    url: https://github.com/apostoldevel/apoctol-thanks/LICENSE.md
+externalDocs:
+  description: Wiki
+  url: https://github.com/apostoldevel/db-platform/wiki
+servers:
+  - url: '{protocol}://donate-system.ru/api/v1'
+    description: THNX - Donate system
+    variables:
+      protocol:
+        enum:
+          - http
+          - https
+        default: https
+  - url: 'http://localhost:{port}/api/v1'
+    description: Local host
+    variables:
+      port:
+        enum:
+          - '8080'
+          - '4977'
+          - '3000'
+        default: '8080'
+tags:
+  - name: Connection
+    description: Check server connection.
+  - name: Common
+    description: Common endpoints.
+  - name: Current
+    description: Get current values.
+  - name: Log
+    description: Logs
+  - name: User
+    description: User endpoints.
+  - name: Sign
+    description: Sign endpoints.
+  - name: Notice
+    description: Notice endpoints.
+  - name: Client
+    description: Client document endpoints.
+  - name: Post
+    description: Post document endpoints.
+  - name: Target
+    description: Target document endpoints.
+  - name: Account
+    description: Account document endpoints.
+  - name: Card
+    description: Banking card document endpoints.
+  - name: Transaction
+    description: Transaction document endpoints.
+  - name: Invoice
+    description: Invoice document endpoints.
+  - name: Device
+    description: Device document endpoints.
+  - name: Message
+    description: Message document endpoints.
+  - name: Job
+    description: Job document endpoints.
+  - name: Service
+    description: Service reference endpoints.
+  - name: Tariff
+    description: Tariff reference endpoints.
+  - name: Region
+    description: Region reference endpoints.
+  - name: Category
+    description: Category reference endpoints.
+  - name: Currency
+    description: Currency reference endpoints.
+  - name: Agent
+    description: Agent reference endpoints.
+  - name: Program
+    description:  Program reference endpoints.
+  - name: Scheduler
+    description: Scheduler reference endpoints.
+paths:
+  /ping:
+    get:
+      tags:
+        - Connection
+      summary: Check server connection.
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /time:
+    get:
+      tags:
+        - Connection
+      summary: Current server time.
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  serverTime:
+                    type: integer
+                    description: UNIX time
+                example:
+                  serverTime: 1642521843938
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /whoami:
+    get:
+      tags:
+        - Common
+      summary: Current user information
+      operationId: whoami
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      responses:
+        '200':
+          description: Success.
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /event/log/count:
+    post:
+      tags:
+        - Log
+      summary: Count of records.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/list'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/count'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /event/log/get:
+    post:
+      tags:
+        - Log
+      summary: Get event log record.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - id
+              properties:
+                id:
+                  type: integer
+                  format: int64
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+              properties:
+                id:
+                  type: integer
+                  format: int64
+                fields:
+                  type: object
+                  example: null
+                  description: Field list.
+      responses:
+        '200':
+          description: Success.
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /event/log/list:
+    post:
+      tags:
+        - Log
+      summary: Returns event log entries as a list.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/list'
+      responses:
+        '200':
+          description: JSON-array.
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /current/session:
+    get:
+      tags:
+        - Current
+      summary: Current session.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      responses:
+        '200':
+          description: Success.
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /current/user:
+    get:
+      tags:
+        - Current
+      summary: Current user profile.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      responses:
+        '200':
+          description: Success.
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /current/userid:
+    get:
+      tags:
+        - Current
+      summary: Current user ID.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      responses:
+        '200':
+          description: Success.
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /current/username:
+    get:
+      tags:
+        - Current
+      summary: Current username.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      responses:
+        '200':
+          description: Success.
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /current/area:
+    get:
+      tags:
+        - Current
+      summary: Current area.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      responses:
+        '200':
+          description: Success.
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /current/interface:
+    get:
+      tags:
+        - Current
+      summary: Current interface.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      responses:
+        '200':
+          description: Success.
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /current/locale:
+    get:
+      tags:
+        - Current
+      summary: Current locale.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      responses:
+        '200':
+          description: Success.
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /current/oper_date:
+    get:
+      tags:
+        - Current
+      summary: Current business day date.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      responses:
+        '200':
+          description: Success.
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /sign/in:
+    post:
+      tags:
+        - Sign
+      summary: Login with virtual username and password.
+      description: >
+        Requires preauthorization of the OAuth 2.0 client.
+        The method is called by the authorization server at login.
+        Calling a method directly will result in an error.
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SignIn'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignIn'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  session:
+                    type: string
+                    description: Session code.
+                  secret:
+                    type: string
+                    description: Secret key for HMAC-256 signing.
+                  code:
+                    type: string
+                    description: One-time authorization code for obtaining a token, see OAuth 2.0.
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /sign/up:
+    post:
+      tags:
+        - Sign
+      summary: Sign Up.
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - type
+                - username
+                - password
+              properties:
+                type:
+                  type: string
+                  enum: [author, subscriber]
+                  example: physical
+                username:
+                  type: string
+                password:
+                  type: string
+                phone:
+                  type: string
+                email:
+                  type: string
+                description:
+                  type: string
+          application/json:
+            schema:
+              type: object
+              required:
+                - type
+                - username
+                - password
+              properties:
+                type:
+                  type: string
+                  enum: [entity, physical, individual]
+                  example: physical
+                username:
+                  type: string
+                  example: username
+                password:
+                  type: string
+                  example: password
+                name:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      example: null
+                    short:
+                      type: string
+                      example: null
+                    first:
+                      type: string
+                      example: null
+                    last:
+                      type: string
+                      example: null
+                    middle:
+                      type: string
+                      example: null
+                phone:
+                  type: string
+                  example: null
+                email:
+                  type: string
+                  example: null
+                profile:
+                  type: object
+                  properties:
+                    locale:
+                      type: string
+                      format: uuid
+                      example: null
+                    area:
+                      type: string
+                      format: uuid
+                      example: null
+                    interface:
+                      type: string
+                      format: uuid
+                      example: null
+                    email_verified:
+                      type: boolean
+                      example: null
+                    phone_verified:
+                      type: boolean
+                      example: null
+                    picture:
+                      type: string
+                      example: null
+                description:
+                  type: string
+                  example: null
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                    description: Client UUID
+                  userid:
+                    type: string
+                    format: uuid
+                    description: User UUID
+                  uid:
+                    type: string
+                    description: Username (login)
+                  secret:
+                    type: string
+                    description: User secret
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /sign/out:
+    post:
+      tags:
+        - Sign
+      summary: Sign Out.
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SignOut'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignOut'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                    description: Error message (if any).
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /user/password:
+    post:
+      tags:
+        - User
+      summary: Сhange user password
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                oldpass:
+                  type: string
+                newpass:
+                  type: string
+          application/json:
+            schema:
+              type: object
+              properties:
+                oldpass:
+                  type: string
+                newpass:
+                  type: string
+      responses:
+        '200':
+          description: Success.
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /notice/count:
+    post:
+      tags:
+        - Notice
+      summary: Count of records.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/list'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/count'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /notice/get:
+    post:
+      tags:
+        - Notice
+      summary: Get an entry.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/get_form'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/get_json'
+      responses:
+        '200':
+          description: Success.
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /notice/set:
+    post:
+      tags:
+        - Notice
+      summary: Add or edit an entry.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/set'
+      responses:
+        '200':
+          $ref: '#/components/responses/list'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /notice/list:
+    post:
+      tags:
+        - Notice
+      summary: Returns entries as a list.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/list'
+      responses:
+        '200':
+          $ref: '#/components/responses/ListDocument'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /notice/delete:
+    post:
+      tags:
+        - Notice
+      summary: Delete an entry.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/get_form'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/get_json'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                  deleted:
+                    type: boolean
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /client/type:
+    post:
+      tags:
+        - Client
+      summary: Type.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/type'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /client/method:
+    post:
+      tags:
+        - Client
+      summary: Method.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/methodId'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/methodId'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/status'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /client/count:
+    post:
+      tags:
+        - Client
+      summary: Count of records.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/list'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/count'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /client/get:
+    post:
+      tags:
+        - Client
+      summary: Get an entry.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/get_form'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/get_json'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetDocument'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /client/set:
+    post:
+      tags:
+        - Client
+      summary: Add or edit an entry.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/set'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetDocument'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /client/list:
+    post:
+      tags:
+        - Client
+      summary: Returns entries as a list.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/list'
+      responses:
+        '200':
+          $ref: '#/components/responses/ListDocument'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /post/type:
+    post:
+      tags:
+        - Post
+      summary: Types
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/type'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /post/method:
+    post:
+      tags:
+        - Post
+      summary: Method.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/methodId'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/methodId'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/method'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /post/count:
+    post:
+      tags:
+        - Post
+      summary: Count of records.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/list'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/count'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /post/get:
+    post:
+      tags:
+        - Post
+      summary:  Get an entry.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/get_form'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/get_json'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetDocument'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /post/set:
+    post:
+      tags:
+        - Post
+      summary: Add or edit an entry.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/set'
+      responses:
+        '200':
+          description: Successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/count'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /post/list:
+    post:
+      tags:
+        - Post
+      summary: Returns entries as a list.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/list'
+      responses:
+        '200':
+          $ref: '#/components/responses/ListDocument'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /post/content/count:
+    post:
+      tags:
+        - Post
+      summary: Count of records.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/list'
+      responses:
+        '200':
+          description: Successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/count'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /post/content/get:
+    post:
+      tags:
+        - Post
+      summary: Get an entry.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/get_form'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/get_json'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetContent'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /post/content/list:
+    post:
+      tags:
+        - Post
+      summary: Returns entries as a list.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/list'
+      responses:
+        '200':
+          description: JSON-array.
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /target/type:
+    post:
+      tags:
+        - Target
+      summary: Type.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/type'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /target/method:
+    post:
+      tags:
+        - Target
+      summary: Method.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/methodId'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/methodId'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/method'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /target/count:
+    post:
+      tags:
+        - Target
+      summary: Count of records.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/list'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/count'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /target/get:
+    post:
+      tags:
+        - Target
+      summary: Get an entry.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/get_form'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/get_json'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetDocument'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /target/set:
+    post:
+      tags:
+        - Target
+      summary: Add or edit an entry.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/set'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetDocument'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /target/list:
+    post:
+      tags:
+        - Target
+      summary: Returns entries as a list.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/list'
+      responses:
+        '200':
+          $ref: '#/components/responses/ListDocument'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /account/type:
+    post:
+      tags:
+        - Account
+      summary: Type.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/type'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /account/method:
+    post:
+      tags:
+        - Account
+      summary: Method.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/methodId'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/methodId'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/method'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /account/count:
+    post:
+      tags:
+        - Account
+      summary: Count of records.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/list'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/count'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /account/get:
+    post:
+      tags:
+        - Account
+      summary: Get an entry.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/get_form'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/get_json'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetDocument'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /account/set:
+    post:
+      tags:
+        - Account
+      summary: Add or edit an entry.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/set'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetDocument'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /account/list:
+    post:
+      tags:
+        - Account
+      summary: Returns entries as a list.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/list'
+      responses:
+        '200':
+          $ref: '#/components/responses/ListDocument'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /account/balance:
+    post:
+      tags:
+        - Account
+      summary: Get account balance.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/get_form'
+                - type: object
+                  properties:
+                    datetime:
+                      type: string
+                      format: date-time
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/get_form'
+                - type: object
+                  properties:
+                    datetime:
+                      type: string
+                      format: date-time
+      responses:
+        '200':
+          description: Account balance
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  balance:
+                    type: number
+                    format: double
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /card/type:
+    post:
+      tags:
+        - Card
+      summary: Type.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/type'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /card/method:
+    post:
+      tags:
+        - Card
+      summary: Method.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/methodId'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/methodId'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/method'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /card/count:
+    post:
+      tags:
+        - Card
+      summary: Count of records.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/list'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/count'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /cadr/get:
+    post:
+      tags:
+        - Card
+      summary: Get an entry.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/get_form'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/get_json'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetDocument'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /card/set:
+    post:
+      tags:
+        - Card
+      summary: Add or edit an entry.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/set'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetDocument'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /card/list:
+    post:
+      tags:
+        - Card
+      summary: Returns entries as a list.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/list'
+      responses:
+        '200':
+          $ref: '#/components/responses/ListDocument'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /card/bind:
+    post:
+      tags:
+        - Card
+      summary: Bind banking card.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - code
+                - name
+              properties:
+                code:
+                  type: string
+                name:
+                  type: string
+                expiry:
+                  type: string
+                  format: date
+                hidden:
+                  type: string
+                  description: CVC code
+                label:
+                  type: string
+                description:
+                  type: string
+          application/json:
+            schema:
+              type: object
+              required:
+                - code
+                - name
+              properties:
+                code:
+                  type: string
+                name:
+                  type: string
+                expiry:
+                  type: string
+                  format: date
+                hidden:
+                  type: string
+                  description: CVC code
+                label:
+                  type: string
+                description:
+                  type: string
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - status
+                properties:
+                  status:
+                    type: string
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /card/unbind:
+    post:
+      tags:
+        - Card
+      summary: Unbind banking card.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - id
+                - code
+              properties:
+                id:
+                  type: string
+                  format: uuid
+                code:
+                  type: string
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+                - code
+              properties:
+                id:
+                  type: string
+                  format: uuid
+                code:
+                  type: string
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - status
+                properties:
+                  status:
+                    type: string
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /transaction/type:
+    post:
+      tags:
+        - Transaction
+      summary: Type.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/type'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /transaction/method:
+    post:
+      tags:
+        - Transaction
+      summary: Method.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/methodId'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/methodId'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/method'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /transaction/count:
+    post:
+      tags:
+        - Transaction
+      summary: Count of records.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/list'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/count'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /transaction/get:
+    post:
+      tags:
+        - Transaction
+      summary: Get an entry.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/get_form'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/get_json'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetDocument'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /transaction/set:
+    post:
+      tags:
+        - Transaction
+      summary: Add or edit an entry.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/set'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetDocument'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /transaction/list:
+    post:
+      tags:
+        - Transaction
+      summary: Returns entries as a list.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/list'
+      responses:
+        '200':
+          $ref: '#/components/responses/ListDocument'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /transaction/current:
+    post:
+      tags:
+        - Transaction
+      summary: Current transaction object.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - client
+                - connector
+              properties:
+                client:
+                  type: string
+                  format: uuid
+                connector:
+                  type: string
+                  format: uuid
+          application/json:
+            schema:
+              type: object
+              required:
+                - client
+                - connector
+              properties:
+                client:
+                  type: string
+                  format: uuid
+                connector:
+                  type: string
+                  format: uuid
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /invoice/type:
+    post:
+      tags:
+        - Invoice
+      summary: Type.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/type'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /invoice/method:
+    post:
+      tags:
+        - Invoice
+      summary: Method.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/methodId'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/methodId'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/method'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /invoice/count:
+    post:
+      tags:
+        - Invoice
+      summary: Count of records.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/list'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/count'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /invoice/get:
+    post:
+      tags:
+        - Invoice
+      summary: Get an entry.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/get_form'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/get_json'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetDocument'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /invoice/set:
+    post:
+      tags:
+        - Invoice
+      summary: Add or edit an entry.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/set'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetDocument'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /invoice/list:
+    post:
+      tags:
+        - Invoice
+      summary: Returns entries as a list.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/list'
+      responses:
+        '200':
+          $ref: '#/components/responses/ListDocument'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /device/type:
+    post:
+      tags:
+        - Device
+      summary: Type.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/type'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /device/method:
+    post:
+      tags:
+        - Device
+      summary: Method.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/methodId'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/methodId'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/method'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /device/count:
+    post:
+      tags:
+        - Device
+      summary: Count of records.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/list'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/count'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /device/get:
+    post:
+      tags:
+        - Device
+      summary: Get an entry.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/get_form'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/get_json'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetDocument'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /device/set:
+    post:
+      tags:
+        - Device
+      summary: Add or edit an entry.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/set'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetDocument'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /device/list:
+    post:
+      tags:
+        - Device
+      summary: Returns entries as a list.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/list'
+      responses:
+        '200':
+          $ref: '#/components/responses/ListDocument'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /job/type:
+    post:
+      tags:
+        - Job
+      summary: Type.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/type'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /job/method:
+    post:
+      tags:
+        - Job
+      summary: Method.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/methodId'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/methodId'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/method'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /job/count:
+    post:
+      tags:
+        - Job
+      summary: Count of records.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/list'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/count'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /job/get:
+    post:
+      tags:
+        - Job
+      summary: Get an entry.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/get_form'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/get_json'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetDocument'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /job/set:
+    post:
+      tags:
+        - Job
+      summary: Add or edit an entry.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/set'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetDocument'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /job/list:
+    post:
+      tags:
+        - Job
+      summary: Returns entries as a list.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/list'
+      responses:
+        '200':
+          $ref: '#/components/responses/ListDocument'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /message/type:
+    post:
+      tags:
+        - Message
+      summary: Type.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/type'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /message/method:
+    post:
+      tags:
+        - Message
+      summary: Method.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/methodId'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/methodId'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/method'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /message/count:
+    post:
+      tags:
+        - Message
+      summary: Count of records.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/list'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/count'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /message/get:
+    post:
+      tags:
+        - Message
+      summary: Get an entry.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/get_form'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/get_json'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetDocument'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /message/set:
+    post:
+      tags:
+        - Message
+      summary: Add or edit an entry.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/set'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetDocument'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /message/list:
+    post:
+      tags:
+        - Message
+      summary: Returns entries as a list.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/list'
+      responses:
+        '200':
+          $ref: '#/components/responses/ListDocument'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /service/type:
+    post:
+      tags:
+        - Service
+      summary: Type.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/type'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /service/method:
+    post:
+      tags:
+        - Service
+      summary: Method.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/methodId'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/methodId'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/method'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /service/count:
+    post:
+      tags:
+        - Service
+      summary: Count of records.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/list'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/count'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /service/get:
+    post:
+      tags:
+        - Service
+      summary: Get an entry.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/get_form'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/get_json'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetReference'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /service/set:
+    post:
+      tags:
+        - Service
+      summary: Add or edit an entry.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/set'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetDocument'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /service/list:
+    post:
+      tags:
+        - Service
+      summary: Returns entries as a list.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/list'
+      responses:
+        '200':
+          $ref: '#/components/responses/ListReference'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /region/type:
+    post:
+      tags:
+        - Region
+      summary: Type.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/type'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /region/method:
+    post:
+      tags:
+        - Region
+      summary: Method.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/methodId'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/methodId'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/method'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /region/count:
+    post:
+      tags:
+        - Region
+      summary: Count of records.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/list'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/count'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /region/get:
+    post:
+      tags:
+        - Region
+      summary: Get an entry.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/get_form'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/get_json'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetReference'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /region/set:
+    post:
+      tags:
+        - Region
+      summary: Add or edit an entry.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/set'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetDocument'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /region/list:
+    post:
+      tags:
+        - Region
+      summary: Returns entries as a list.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/list'
+      responses:
+        '200':
+          $ref: '#/components/responses/ListReference'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /tariff/type:
+    post:
+      tags:
+        - Tariff
+      summary: Type.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/type'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /tariff/method:
+    post:
+      tags:
+        - Tariff
+      summary: Method.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/methodId'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/methodId'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/method'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /tariff/count:
+    post:
+      tags:
+        - Tariff
+      summary: Count of records.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/list'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/count'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /tariff/get:
+    post:
+      tags:
+        - Tariff
+      summary: Get an entry.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/get_form'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/get_json'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetReference'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /tariff/set:
+    post:
+      tags:
+        - Tariff
+      summary: Add or edit an entry.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/set'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetDocument'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /tariff/list:
+    post:
+      tags:
+        - Tariff
+      summary: Returns entries as a list.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/list'
+      responses:
+        '200':
+          $ref: '#/components/responses/ListReference'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /agent/type:
+    post:
+      tags:
+        - Agent
+      summary: Type.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/type'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /agent/method:
+    post:
+      tags:
+        - Agent
+      summary: Method.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/methodId'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/methodId'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/method'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /agent/count:
+    post:
+      tags:
+        - Agent
+      summary: Count of records.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/list'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/count'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /agent/get:
+    post:
+      tags:
+        - Agent
+      summary: Get an entry.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/get_form'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/get_json'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetReference'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /agent/set:
+    post:
+      tags:
+        - Agent
+      summary: Add or edit an entry.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/set'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetDocument'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /agent/list:
+    post:
+      tags:
+        - Agent
+      summary: Returns entries as a list.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/list'
+      responses:
+        '200':
+          $ref: '#/components/responses/ListReference'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /program/type:
+    post:
+      tags:
+        - Program
+      summary: Type.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/type'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /program/method:
+    post:
+      tags:
+        - Program
+      summary: Method.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/methodId'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/methodId'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/method'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /program/count:
+    post:
+      tags:
+        - Program
+      summary: Count of records.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/list'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/count'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /program/get:
+    post:
+      tags:
+        - Program
+      summary: Get an entry.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/get_form'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/get_json'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetReference'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /program/set:
+    post:
+      tags:
+        - Program
+      summary: Add or edit an entry.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/set'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetDocument'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /program/list:
+    post:
+      tags:
+        - Program
+      summary: Returns entries as a list.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/list'
+      responses:
+        '200':
+          $ref: '#/components/responses/ListReference'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /scheduler/type:
+    post:
+      tags:
+        - Scheduler
+      summary: Type.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/type'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /scheduler/method:
+    post:
+      tags:
+        - Scheduler
+      summary: Method.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/methodId'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/methodId'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/method'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /scheduler/count:
+    post:
+      tags:
+        - Scheduler
+      summary: Count of records.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/list'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/count'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /scheduler/get:
+    post:
+      tags:
+        - Scheduler
+      summary: Get an entry.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/get_form'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/get_json'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetReference'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /scheduler/set:
+    post:
+      tags:
+        - Scheduler
+      summary: Add or edit an entry.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/set'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetDocument'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /scheduler/list:
+    post:
+      tags:
+        - Scheduler
+      summary: Returns entries as a list.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/list'
+      responses:
+        '200':
+          $ref: '#/components/responses/ListReference'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /category/type:
+    post:
+      tags:
+        - Category
+      summary: Type.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/type'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /category/method:
+    post:
+      tags:
+        - Category
+      summary: Method.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/methodId'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/methodId'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/method'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /category/count:
+    post:
+      tags:
+        - Category
+      summary: Count of records.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/list'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/count'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /category/get:
+    post:
+      tags:
+        - Category
+      summary: Get an entry.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/get_form'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/get_json'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetReference'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /category/set:
+    post:
+      tags:
+        - Category
+      summary: Add or edit an entry.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/set'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetDocument'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /category/list:
+    post:
+      tags:
+        - Category
+      summary: Returns entries as a list.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/list'
+      responses:
+        '200':
+          $ref: '#/components/responses/ListReference'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /currency/type:
+    post:
+      tags:
+        - Currency
+      summary: Type.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/type'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /currency/method:
+    post:
+      tags:
+        - Currency
+      summary: Method.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/methodId'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/methodId'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/method'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /currency/count:
+    post:
+      tags:
+        - Currency
+      summary: Count of records.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/list'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/count'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /currency/get:
+    post:
+      tags:
+        - Currency
+      summary: Get an entry.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/get_form'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/get_json'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetReference'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /currency/set:
+    post:
+      tags:
+        - Currency
+      summary: Add or edit an entry.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/set'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetDocument'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+  /currency/list:
+    post:
+      tags:
+        - Currency
+      summary: Returns entries as a list.
+      parameters:
+        - $ref: '#/components/parameters/resultObject'
+        - $ref: '#/components/parameters/resultFormat'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/list'
+      responses:
+        '200':
+          $ref: '#/components/responses/ListReference'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalError'
+components:
+  parameters:
+    resultObject:
+      in: query
+      name: result_object
+      required: false
+      schema:
+        type: string
+        enum: [true, false]
+      description: Wrap the result in a JSON-object named "result".
+    resultFormat:
+      in: query
+      name: result_format
+      required: false
+      schema:
+        type: string
+        enum: [object, array, null]
+      description: >
+        All endpoints are returned: JSON-object or JSON-array depending on the number of entries in the response.
+        You can change this behavior with this setting.
+  responses:
+    GetObject:
+      description: Object
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/getObject'
+    GetContent:
+      description: Document
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/getContent'
+    GetDocument:
+      description: Document
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/getDocument'
+    GetReference:
+      description: Reference
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/getReference'
+    ListObject:
+      description: List of objects.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/listObject'
+    ListDocument:
+      description: List of documents.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/listDocument'
+    ListReference:
+      description: List of references.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/listReference'
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+    NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+    InternalError:
+      description: Internal error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+  schemas:
+    type:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        entity:
+          type: string
+          format: uuid
+        entitycode:
+          type: string
+        entityname:
+          type: string
+        class:
+          type: string
+          format: uuid
+        classcode:
+          type: string
+        classlabel:
+          type: string
+        code:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+    method:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        parent:
+          type: string
+          format: uuid
+          example: null
+        entity:
+          type: string
+          format: uuid
+        entitycode:
+          type: string
+        entityname:
+          type: string
+        class:
+          type: string
+          format: uuid
+        classcode:
+          type: string
+        classlabel:
+          type: string
+        state:
+          type: string
+          format: uuid
+        statecode:
+          type: string
+        statelabel:
+          type: string
+        action:
+          type: string
+          format: uuid
+        actioncode:
+          type: string
+        actionname:
+          type: string
+        code:
+          type: string
+        label:
+          type: string
+        sequence:
+          type: integer
+        visible:
+          type: boolean
+    methodId:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          format: uuid
+    setPandoraMemory:
+      type: object
+      properties:
+        Post:
+          type: string
+          format: uuid
+        messageid:
+          type: integer
+          format: int32
+        data:
+          type: string
+    getContent:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        post:
+          type: string
+          format: uuid
+        locale:
+          type: string
+          format: uuid
+        localecode:
+          type: string
+        localename:
+          type: string
+        localedescription:
+          type: string
+        hash:
+          type: string
+        content:
+          type: string
+        rendered:
+          type: string
+        raw:
+          type: string
+        revision:
+          type: string
+        version:
+          type: string
+        validFromDate:
+          type: string
+          format: date-time
+        validToDate:
+          type: string
+          format: date-time
+    getObject:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        parent:
+          type: string
+          format: uuid
+        entity:
+          type: string
+          format: uuid
+        entitycode:
+          type: string
+        entityname:
+          type: string
+        entitydescription:
+          type: string
+        class:
+          type: string
+          format: uuid
+        classcode:
+          type: string
+        classlabel:
+          type: string
+        type:
+          type: string
+          format: uuid
+        typecode:
+          type: string
+        typename:
+          type: string
+        typedescription:
+          type: string
+        label:
+          type: string
+        statetype:
+          type: string
+          format: uuid
+        statetypecode:
+          type: string
+        statetypename:
+          type: string
+        state:
+          type: string
+          format: uuid
+        statecode:
+          type: string
+        statelabel:
+          type: string
+        lastupdate:
+          type: string
+          format: date-time
+        owner:
+          type: string
+          format: uuid
+        ownercode:
+          type: string
+        ownername:
+          type: string
+        created:
+          type: string
+          format: date-time
+        oper:
+          type: string
+          format: uuid
+        opercode:
+          type: string
+        opername:
+          type: string
+        operdate:
+          type: string
+          format: date-time
+        scope:
+          type: string
+          format: uuid
+        scopecode:
+          type: string
+        scopename:
+          type: string
+        scopedescription:
+          type: string
+    getDocument:
+      allOf:
+        - $ref: '#/components/schemas/getObject'
+        - type: object
+          properties:
+            area:
+              type: string
+              format: uuid
+            areacode:
+              type: string
+            areaname:
+              type: string
+            areadescription:
+              type: string
+    getReference:
+      allOf:
+        - $ref: '#/components/schemas/getObject'
+        - type: object
+          properties:
+            code:
+              type: string
+            name:
+              type: string
+            description:
+              type: string
+    listObject:
+      type: array
+      description: List of objects.
+      items:
+        $ref: '#/components/schemas/getObject'
+    listDocument:
+      type: array
+      description: List of documents.
+      items:
+        $ref: '#/components/schemas/getDocument'
+    listReference:
+      type: array
+      description: List of references.
+      items:
+        $ref: '#/components/schemas/getReference'
+    set:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: null
+        type:
+          type: string
+          format: uuid
+          example: null
+    get_form:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          format: uuid
+    get_json:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          format: uuid
+        fields:
+          type: object
+          example: null
+          description: Field list.
+    SignIn:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+          description: Username or personal code.
+        password:
+          type: string
+          description: Password. If `username` is a personal code, then pass the SHA1(secret) hash of the user's secret code to `password`.
+        agent:
+          type: string
+          description: Ignored. User agent (browser). The value is set by the system.
+        host:
+          type: string
+          format: ipv4
+          description: Ignored. IP address. The value is set by the system.
+    SignOut:
+      type: object
+      properties:
+        session:
+          type: string
+          description: Session code.
+        closeall:
+          type: boolean
+          description: Close all sessions.
+    list:
+      type: object
+      properties:
+        fields:
+          type: object
+          description: List of fields. If not specified, will return all available fields.
+          example: >
+            ["field1", "field2", "field3"]
+        search:
+          type: object
+          properties:
+            condition:
+              type: string
+              enum: [AND, OR]
+              default: AND
+              description: Condition.
+            field:
+              type: string
+              description: The name of the field to which the condition applies.
+            compare:
+              type: string
+              enum: [EQL, NEQ, LSS, LEQ, GTR, GEQ, GIN, AND, OR, XOR, NOT, ISN, INN, LKE, IKE, SIM, PSX, PSI, PSN, PIN]
+              default: EQL
+              description: Comparison.
+            value:
+              type: string
+              description: The name of the field to which the condition applies.
+            valarr:
+              type: object
+              description: Lookup values, specified as an array. If the valarr key is specified, then the `compare` and `value` keys are ignored.
+            lstr:
+              type: string
+              description: Left parenthesis.
+            rstr:
+              type: string
+              description: Right parenthesis.
+          description: Conditions for data selection.
+          example: >
+            [{"field": "apartment", "compare": "GEQ", "value": "5"}]
+        filter:
+          type: object
+          description: Filter for selecting data in the form of a key/value pair. The key is the name of the field. filter is a short form of search.
+          example: >
+            {"object": "00000000-0000-4000-a000-000000000000", "code": "default"}
+        reclimit:
+          type: integer
+          description: >
+            Returns no more than the specified number of rows (may be less if the query itself returned fewer rows). To make reclimit publicly available, you must pass a value <= 0. To send /endpoint/count, the reclimit: 0 condition is made automatically.
+          default: 500
+        recoffset:
+          type: integer
+          description: Skips the specified number of rows in the query.
+        orderby:
+          type: object
+          description: Sort order (array of fields). ASC and DESC are allowed.
+          example: >
+            ["field1", "field2 ASC", "field3 DESC"]
+      example: {"reclimit": 50}
+      description: Query.
+    response:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: integer
+              format: int32
+            message:
+              type: string
+    count:
+      type: object
+      properties:
+        count:
+          type: integer
+          format: int32
+          example: 0
+    error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: integer
+              format: int32
+            message:
+              type: string
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      description: >
+        This API uses OAuth 2 with the implicit grant flow.
+        [More info](https://github.com/apostoldevel/module-AuthServer).
+      flows:
+        password:
+          tokenUrl: /oauth2/token
+          scopes:
+            thanks: default
+        implicit:
+          authorizationUrl: /oauth2/authorize
+          scopes:
+            thanks: default
+security:
+  - oauth2:
+      - thanks

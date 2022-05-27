@@ -1,0 +1,5 @@
+\echo [M] call api.sql
+\ir api.sql
+
+\ir './reference/update.psql'
+\ir './document/update.psql'

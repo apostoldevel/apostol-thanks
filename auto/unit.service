@@ -1,0 +1,21 @@
+[Unit]
+Description=THNX - Donate System
+After=network.target remote-fs.target nss-lookup.target
+
+[Service]
+Type=forking
+PIDFile=/run/thnx.pid
+# thnx will fail to start if /run/thnx.pid already exists but has the wrong
+# SELinux context. This might happen when running `thnx -t` from the cmdline.
+# https://bugzilla.redhat.com/show_bug.cgi?id=1268621
+ExecStartPre=/usr/bin/rm -f /run/thnx.pid
+ExecStartPre=/usr/sbin/thnx -t
+ExecStart=/usr/sbin/thnx
+ExecReload=/bin/kill -s HUP $MAINPID
+KillSignal=SIGQUIT
+TimeoutStopSec=5
+KillMode=mixed
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

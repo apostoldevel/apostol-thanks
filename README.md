@@ -1,10 +1,10 @@
-# Thanks
+# THNX
 
-**Thanks** - Система донатов для авторов.
+**THNX** - Спасибо. Система донатов для авторов.
 
 ОПИСАНИЕ
 -
-**Thanks** - это серверная часть [пет проекта](https://github.com/alexey-goloburdin/thanks) [Алексея Голобурдина](https://www.youtube.com/c/%D0%94%D0%B8%D0%B4%D0%B6%D0%B8%D1%82%D0%B0%D0%BB%D0%B8%D0%B7%D0%B8%D1%80%D1%83%D0%B9).
+**THNX** - это серверная часть [пет проекта](https://github.com/alexey-goloburdin/thanks) [Алексея Голобурдина](https://www.youtube.com/c/%D0%94%D0%B8%D0%B4%D0%B6%D0%B8%D1%82%D0%B0%D0%BB%D0%B8%D0%B7%D0%B8%D1%80%D1%83%D0%B9).
 
 Реализовано на базе [Апостол CRM](https://github.com/apostoldevel/apostol-crm).
 
@@ -76,7 +76,7 @@ $ sudo apt-get install build-essential libssl-dev libcurl4-openssl-dev make cmak
 
 ###### Параметр `--make` необходим для установки базы данных в первый раз. Далее установочный скрипт можно запускать или без параметров или с параметром `--install`.
 
-##### Для сборки **Thanks**, с помощью Git выполните:
+##### Для сборки **THNX**, с помощью Git выполните:
 ~~~
 $ git clone https://github.com/apostoldevel/apostol-thanks.git
 ~~~
@@ -84,16 +84,16 @@ $ git clone https://github.com/apostoldevel/apostol-thanks.git
 1. Настроить `CMakeLists.txt` (по необходимости);
 1. Собрать и скомпилировать (см. ниже).
 
-##### Для того чтобы установить **Thanks** (без Git) необходимо:
+##### Для того чтобы установить **THNX** (без Git) необходимо:
 
-1. Скачать **Thanks** по [ссылке](https://github.com/apostoldevel/apostol-thanks/archive/master.zip);
+1. Скачать **THNX** по [ссылке](https://github.com/apostoldevel/apostol-thanks/archive/master.zip);
 1. Распаковать;
 1. Настроить `CMakeLists.txt` (по необходимости);
 1. Собрать и скомпилировать (см. ниже).
 
 ###### Сборка:
 ~~~
-$ cd thanks
+$ cd apostol-thanks
 $ ./configure
 ~~~
 
@@ -104,59 +104,59 @@ $ make
 $ sudo make install
 ~~~
 
-По умолчанию бинарный файл `thanks` будет установлен в:
+По умолчанию бинарный файл `thnx` будет установлен в:
 ~~~
 /usr/sbin
 ~~~
 
 Файл конфигурации и необходимые для работы файлы, в зависимости от варианта установки, будут расположены в: 
 ~~~
-/etc/thanks
+/etc/thnx
 или
-~/thanks
+~/thnx
 ~~~
 
 ЗАПУСК 
 -
 ###### Если `INSTALL_AS_ROOT` установлено в `ON`.
 
-**`thanks`** - это системная служба (демон) Linux. 
-Для управления **`thanks`** используйте стандартные команды управления службами.
+**`thnx`** - это системная служба (демон) Linux. 
+Для управления **`thnx`** используйте стандартные команды управления службами.
 
-Для запуска `thanks` выполните:
+Для запуска `thnx` выполните:
 ~~~
-$ sudo service thanks start
+$ sudo service thnx start
 ~~~
 
 Для проверки статуса выполните:
 ~~~
-$ sudo service thanks status
+$ sudo service thnx status
 ~~~
 
 Результат должен быть **примерно** таким:
 ~~~
-● thanks.service - Thanks (Donate system)
-   Loaded: loaded (/usr/lib/systemd/system/thanks.service; enabled; vendor preset: disabled)
+● thnx.service - THNX (Donate system)
+   Loaded: loaded (/usr/lib/systemd/system/thnx.service; enabled; vendor preset: disabled)
    Active: active (running) since Tue 2021-12-28 14:24:04 UTC; 1 weeks 0 days ago
   Process: 878560 ExecReload=/bin/kill -s HUP $MAINPID (code=exited, status=0/SUCCESS)
-  Process: 938206 ExecStart=/usr/sbin/thanks (code=exited, status=0/SUCCESS)
-  Process: 938204 ExecStartPre=/usr/sbin/thanks -t (code=exited, status=0/SUCCESS)
-  Process: 938202 ExecStartPre=/usr/bin/rm -f /run/thanks.pid (code=exited, status=0/SUCCESS)
- Main PID: 938207 (thanks)
+  Process: 938206 ExecStart=/usr/sbin/thnx (code=exited, status=0/SUCCESS)
+  Process: 938204 ExecStartPre=/usr/sbin/thnx -t (code=exited, status=0/SUCCESS)
+  Process: 938202 ExecStartPre=/usr/bin/rm -f /run/thnx.pid (code=exited, status=0/SUCCESS)
+ Main PID: 938207 (thnx)
     Tasks: 4 (limit: 49484)
    Memory: 20.1M
-   CGroup: /system.slice/thanks.service
-           ├─938207 thanks: master process /usr/sbin/thanks
-           ├─938208 thanks: worker process ("web socket api", "application server", "authorization server", "web server")
-           ├─938209 thanks: message server
-           └─938210 thanks: job scheduler
+   CGroup: /system.slice/thnx.service
+           ├─938207 thnx: master process /usr/sbin/thnx
+           ├─938208 thnx: worker process ("web socket api", "application server", "authorization server", "web server")
+           ├─938209 thnx: message server
+           └─938210 thnx: job scheduler
 ~~~
 
 ### **Управление**.
 
-Управлять **`thanks`** можно с помощью сигналов.
-Номер главного процесса по умолчанию записывается в файл `/run/thanks.pid`. 
-Изменить имя этого файла можно при конфигурации сборки или же в `thanks.conf` секция `[daemon]` ключ `pid`. 
+Управлять **`thnx`** можно с помощью сигналов.
+Номер главного процесса по умолчанию записывается в файл `/run/thnx.pid`. 
+Изменить имя этого файла можно при конфигурации сборки или же в `thnx.conf` секция `[daemon]` ключ `pid`. 
 
 Главный процесс поддерживает следующие сигналы:
 

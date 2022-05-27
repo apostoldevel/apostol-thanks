@@ -1,0 +1,5 @@
+\echo [M] call api.sql
+\ir api.sql
+
+\ir './reference/create.psql'
+\ir './document/create.psql'

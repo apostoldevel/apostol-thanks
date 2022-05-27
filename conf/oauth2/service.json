@@ -1,0 +1,10 @@
+{
+  "type": "service_account",
+  "issuers": ["accounts.donate-system.ru"],
+  "scopes": ["thanks"],
+  "client_id": "service-donate-system.ru",
+  "client_secret": "JLFNkBWWzehemKc8XS4xq0Je",
+  "algorithm": "HS256",
+  "auth_uri": "/oauth2/authorize",
+  "token_uri": "/oauth2/token"
+}
