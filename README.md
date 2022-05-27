@@ -11,9 +11,13 @@
 API
 -
 
-[REST API](https://github.com/apostoldevel/module-AppServer#rest-api)
+Мы используем OpenAPI для взаимодействия с Система донатов (THNX). Вы можете напрямую открыть пользовательский интерфейс Swagger через [http://donate-system.ru/docs](http://donate-system.ru/docs/).
 
-[WebSocket API](https://github.com/apostoldevel/module-WebSocketAPI#websocket-api)
+Кроме того, вы можете использовать любой клиент OpenAPI для импорта файла [api.yaml](https://github.com/apostoldevel/apostol-thanks/blob/master/www/docs/api.yaml) из нашего репозитория (скачать).
+
+Документация к [REST API](https://github.com/apostoldevel/module-AppServer#rest-api) платформы [Апостол CRM](https://github.com/apostoldevel/apostol-crm). 
+
+Документация к [WebSocket API](https://github.com/apostoldevel/module-WebSocketAPI#websocket-api) платформы [Апостол CRM](https://github.com/apostoldevel/apostol-crm).
 
 СБОРКА И УСТАНОВКА
 -
@@ -29,7 +33,7 @@ API
 
 Для того чтобы установить компилятор C++ и необходимые библиотеки на Ubuntu выполните:
 ~~~
-$ sudo apt-get install build-essential libssl-dev libcurl4-openssl-dev make cmake gcc g++
+sudo apt-get install build-essential libssl-dev libcurl4-openssl-dev make cmake gcc g++
 ~~~
 
 ###### Подробное описание установки C++, CMake, IDE и иных компонентов необходимых для сборки проекта не входит в данное руководство.
@@ -78,7 +82,7 @@ $ sudo apt-get install build-essential libssl-dev libcurl4-openssl-dev make cmak
 
 ##### Для сборки **THNX**, с помощью Git выполните:
 ~~~
-$ git clone https://github.com/apostoldevel/apostol-thanks.git
+git clone https://github.com/apostoldevel/apostol-thanks.git
 ~~~
 Далее:
 1. Настроить `CMakeLists.txt` (по необходимости);
@@ -93,15 +97,15 @@ $ git clone https://github.com/apostoldevel/apostol-thanks.git
 
 ###### Сборка:
 ~~~
-$ cd apostol-thanks
-$ ./configure
+cd apostol-thanks
+./configure
 ~~~
 
 ###### Компиляция и установка:
 ~~~
-$ cd cmake-build-release
-$ make
-$ sudo make install
+cd cmake-build-release
+make
+sudo make install
 ~~~
 
 По умолчанию бинарный файл `thnx` будет установлен в:
@@ -125,12 +129,12 @@ $ sudo make install
 
 Для запуска `thnx` выполните:
 ~~~
-$ sudo service thnx start
+sudo systemctl start thnx
 ~~~
 
 Для проверки статуса выполните:
 ~~~
-$ sudo service thnx status
+sudo systemctl status thnx
 ~~~
 
 Результат должен быть **примерно** таким:

@@ -20,7 +20,7 @@ servers:
         enum:
           - http
           - https
-        default: https
+        default: http
   - url: 'http://localhost:{port}/api/v1'
     description: Local host
     variables:
@@ -476,7 +476,7 @@ paths:
                 type:
                   type: string
                   enum: [author, subscriber]
-                  example: physical
+                  example: author
                 username:
                   type: string
                 password:
@@ -497,8 +497,8 @@ paths:
               properties:
                 type:
                   type: string
-                  enum: [entity, physical, individual]
-                  example: physical
+                  enum: [author, subscriber]
+                  example: author
                 username:
                   type: string
                   example: username
