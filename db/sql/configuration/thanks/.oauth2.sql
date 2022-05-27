@@ -30,6 +30,6 @@ SELECT CreateAudience(GetProvider('default'), GetApplication('web'), GetAlgorith
 SELECT CreateAudience(GetProvider('default'), GetApplication('android'), GetAlgorithm('HS256'), 'android-donate-system.ru', 'LEhl73UZ12Q24OJYRoTOFGcN', 'OAuth 2.0 Client Id for Android mobile applications.');
 SELECT CreateAudience(GetProvider('default'), GetApplication('ios'), GetAlgorithm('HS256'), 'ios-donate-system.ru', 'CHDfZA1bJ4hllfR01tpiUfpt', 'OAuth 2.0 Client Id for iOS mobile applications.');
 
---SELECT CreateAudience(GetProvider('google'), GetApplication('web'), GetAlgorithm('HS256'), '.apps.googleusercontent.com', '', 'Google Client Id for donate-system.ru');
+SELECT CreateAudience(GetProvider('google'), GetApplication('web'), GetAlgorithm('HS256'), '1098231874447-aaslf7j6m2631791otl3jiak16rnpnvk.apps.googleusercontent.com', '', 'Google Client Id for donate-system.ru');
 
 SELECT AddMemberToGroup(CreateUser(code, secret, 'OAuth 2.0 Client Id', null,null, name, false, true), GetGroup('system')) FROM oauth2.audience;
