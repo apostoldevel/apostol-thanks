@@ -1,5 +1,7 @@
 # THNX
 
+> **Archived.** This repository is kept for reference and is no longer developed.
+
 **THNX** - Спасибо. Система донатов для авторов.
 
 ОПИСАНИЕ
